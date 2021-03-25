@@ -1,5 +1,6 @@
 /**
  * Author: Sami Ouaret
+ * https://github.com/samyouaret/compression-algorithms
 **/
 
 #include <stdio.h>
