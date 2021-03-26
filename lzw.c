@@ -8,6 +8,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
+
 #define BUFFER_SIZE 100
 typedef struct dict_node
 {
@@ -33,6 +35,7 @@ int node_exists(dict_type *dict, int index);
 void push(dict_type *dict, char *str, int index);
 int get_index(dict_type *dict, char *str);
 void print_address(char *str, dict_type *dict);
+void print_array(int arr[], int size);
 
 void lzw_compress(const char *str)
 {
@@ -143,27 +146,6 @@ char *get_str_by_index(dict_type *dict, int index)
     return NULL;
 }
 
-void print_address(char *str, dict_type *dict)
-{
-    int index = get_index(dict, str);
-    if (index > -1)
-    {
-        printf(" @%s=%d\n", str, index);
-    }
-    else
-    {
-        printf(" @%c=%d\n", str[0], str[0]);
-    }
-}
-
-void print_dict(dict_type *dict)
-{
-    for (size_t i = 0; node_exists(dict, i); i++)
-    {
-        printf("text: %s\tindex: %d\n", dict->nodes[i]->str, dict->nodes[i]->index);
-    }
-}
-
 int node_exists(dict_type *dict, int index)
 {
     return index < dict->top && index < dict->size;
@@ -205,20 +187,61 @@ void push(dict_type *dict, char *str, int index)
     ++dict->top;
 }
 
+void print_address(char *str, dict_type *dict)
+{
+    int index = get_index(dict, str);
+    if (index > -1)
+    {
+        printf(" @%s=%d\n", str, index);
+    }
+    else
+    {
+        printf(" @%c=%d\n", str[0], str[0]);
+    }
+}
+
+void print_dict(dict_type *dict)
+{
+    printf("Dictionary new entries\n");
+    printf("\ntext\tindex\n\n");
+    for (size_t i = 0; node_exists(dict, i); i++)
+    {
+        printf(" %s\t %d\n", dict->nodes[i]->str, dict->nodes[i]->index);
+    }
+}
+
+void print_array(int arr[], int size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        printf("%d", arr[i]);
+        if (i != size - 1)
+        {
+            printf(", ");
+        }
+    }
+    printf("\n");
+}
+
 int main(int argc, char **argv)
 {
+    char *str = "SISI-ET-ISIS";
     if (argc < 2)
     {
-        printf("please enter text to compress\n");
-        exit(1);
+        printf("you didn't enter a text ,will use \"%s\" as example\n", str);
+        // exit(1);
     }
-    printf("result of compressing\n");
-    // lzw_compress("SISI-ET-ISIS");
-    lzw_compress(argv[1]);
+    else
+    {
+        str = argv[1];
+    }
+    printf("\nresult of compressing\n");
+    lzw_compress(str);
     int sequence[] = {83, 73, 256, 45, 69, 84, 45, 257, 257};
-
-    printf("\nexample of decompressing: \n");
-    lzw_decompress(sequence, 9);
+    int size = ARRAY_SIZE(sequence);
+    printf("\nexample of decompressing: ");
+    print_array(sequence, size);
+    lzw_decompress(sequence, size);
     printf("\n");
 
     return 0;

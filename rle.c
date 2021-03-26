@@ -27,7 +27,6 @@ char *rle_compress(const char *str, size_t min_repeat, char header)
         {
             ++repeat;
         }
-        printf("current %c with repeat of %d\n", current, repeat);
         if (repeat >= min_repeat)
         {
             i += repeat - 1;            // repeat started from 1 i started form 0
@@ -71,14 +70,19 @@ char *rle_uncompress(const char *str)
 
 int main(int argc, char **argv)
 {
+    char *str = "AAAAABBBABBBBBCCCDDDCCCX";
     if (argc < 2)
     {
-        printf("please enter text to compress\n");
-        exit(1);
+        printf("you didn't enter a text ,will use \"%s\" as example\n", str);
+        // exit(1);
+    }
+    else
+    {
+        str = argv[1];
     }
 
-    char *result = rle_compress(argv[1], MIN_REPEAT, HEADER_CHAR);
-    printf("result of compressing %s is %s\n", argv[1], result);
+    char *result = rle_compress(str, MIN_REPEAT, HEADER_CHAR);
+    printf("result of compressing %s is %s\n", str, result);
     printf("result of uncompressing %s is %s\n", result, rle_uncompress(result));
 
     return 0;

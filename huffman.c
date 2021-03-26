@@ -263,16 +263,20 @@ int left_compare(bstnode *node1, bstnode *node2)
 
 int main(int argc, char **argv)
 {
+    char *str = "aabbbcddef";
     if (argc < 2)
     {
-        printf("please enter text to compress\n");
-        exit(1);
+        printf("you didn't enter a text ,will use \"%s\" as example\n", str);
+        // exit(1);
     }
-    // bstnode *root = huffman_compress("BILLBEATSBEN");
-    int size = strlen(argv[1]);
-    bstnode *root = huffman_compress(argv[1]);
-    printf("result of compressing: %s\n", argv[1]);
-    huffman_code(argv[1], root, size);
+    else
+    {
+        str = argv[1];
+    }
+    int size = strlen(str);
+    bstnode *root = huffman_compress(str);
+    printf("result of compressing: %s\n", str);
+    huffman_code(str, root, size);
 
     return 0;
 }
